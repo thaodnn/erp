@@ -1,4 +1,4 @@
-package org.vnpt_technology.selenium.erp.system.functional.procurement.scBoM;
+package org.vnpt_technology.selenium.erp.procurement.scBoM;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;

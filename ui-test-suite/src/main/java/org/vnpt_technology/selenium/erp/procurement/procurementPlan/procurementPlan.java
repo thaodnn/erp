@@ -1,4 +1,4 @@
-package org.vnpt_technology.selenium.erp.system.functional.procurement.procurement_plan;
+package org.vnpt_technology.selenium.erp.procurement.procurementPlan;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
