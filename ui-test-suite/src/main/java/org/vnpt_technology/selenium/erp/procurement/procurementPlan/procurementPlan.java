@@ -10,49 +10,64 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;
+import org.vnpt_technology.selenium.LoginLogout;
+import org.vnpt_technology.selenium.Utils;
 
-public class procurementPlan {
-  @Test(dataProvider = "dp")
-  public void f(Integer n, String s) {
-  }
-  @BeforeMethod
-  public void beforeMethod() {
-  }
+public class procurementPlan extends Utils{
+	
+	LoginLogout logio;
+	
+	@Test
+	public void testcase1(String username, String password) throws Exception {
+		String File_Data_User = getAbsoluteFilePath("selenium\\Login_Logout.xls");
+		setExcelFile(File_Data_User, "Sheet1");
+		driver.get(baseUrl);
+		logio.loginPage(getcelldata(0, 1), getcelldata(1, 1));
+	}
 
-  @AfterMethod
-  public void afterMethod() {
-  }
+	@Test(dataProvider = "dp")
+	public void f(Integer n, String s) {
+	}
+
+	@BeforeMethod
+	public void beforeMethod() {
+	}
+
+	@AfterMethod
+	public void afterMethod() {
+	}
+
+	@DataProvider
+	public Object[][] dp() {
+		return new Object[][] { new Object[] { 1, "a" }, new Object[] { 2, "b" }, };
+	}
+
+	@BeforeClass
+	public void beforeClass() {
+		initSeleniumTest();
+		logio= new LoginLogout();
 
 
-  @DataProvider
-  public Object[][] dp() {
-    return new Object[][] {
-      new Object[] { 1, "a" },
-      new Object[] { 2, "b" },
-    };
-  }
-  @BeforeClass
-  public void beforeClass() {
-  }
+	}
 
-  @AfterClass
-  public void afterClass() {
-  }
+	@AfterClass
+	public void afterClass() {
+	}
 
-  @BeforeTest
-  public void beforeTest() {
-  }
+	@BeforeTest
+	public void beforeTest() {
+	}
 
-  @AfterTest
-  public void afterTest() {
-  }
+	@AfterTest
+	public void afterTest() {
+	}
 
-  @BeforeSuite
-  public void beforeSuite() {
-  }
+	@BeforeSuite
+	public void beforeSuite() {
+	}
 
-  @AfterSuite
-  public void afterSuite() {
-  }
+	@AfterSuite
+	public void afterSuite() {
+	}
 
 }
