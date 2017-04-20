@@ -1,22 +1,26 @@
 package org.vnpt_technology.selenium;
 
 import org.vnpt_technology.selenium.locator.LoginoutHomepageLocator;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import static org.vnpt_technology.selenium.TestLogger.*;
 
-
 public class LoginLogout extends LoginoutHomepageLocator {
-	static WebDriver driver = new FirefoxDriver();
-    
+	// static WebDriver driver = new FirefoxDriver();
+
 	/**
 	 * Login page
 	 * 
 	 * @throws Exception
 	 */
 	public void loginPage(String username, String password) throws Exception {
-		//info("login with user " + username + " and pass " + password);
+		info("login with user " + username + " and pass " + password);
+		isElementPresent(ELEMENT_TEXTBOX_USERNAME);
+		isElementPresent(ELEMENT_TEXTBOX_PASSWORD);
+		waitForAndGetElement(ELEMENT_TEXTBOX_USERNAME, 3000, 0);
+		waitForAndGetElement(ELEMENT_TEXTBOX_PASSWORD, 3000, 0);
 		type(ELEMENT_TEXTBOX_USERNAME, username, true);
 		type(ELEMENT_TEXTBOX_PASSWORD, password, true);
 		click(ELEMENT_BUTTON_LOGIN);
@@ -26,6 +30,7 @@ public class LoginLogout extends LoginoutHomepageLocator {
 		} else {
 			info("Login sucessfully");
 		}
+
 	}
 
 	/**
@@ -47,6 +52,24 @@ public class LoginLogout extends LoginoutHomepageLocator {
 		} else {
 			info("Logout sucessfully");
 		}
+	}
+
+	/**
+	 * Go to page Procurement Plan
+	 */
+	public void gotoPageProcurementPlan() {
+		info("go To Procurement Plan Page");
+		waitForAndGetElement(ELEMENT_SPAN_PROCUREMNT, 3000, 0);
+		click(ELEMENT_SPAN_PROCUREMNT);
+		waitForAndGetElement(ELEMENT_SPAN_PROCUREMENT_PLAN, 3000, 0);
+		click(ELEMENT_SPAN_PROCUREMENT_PLAN);
+		WebElement pageProcurement = waitForAndGetElement(ELEMENT_TITLE_PAGE_PROCUREMENT_PLAN, 3000, 0);
+		if (pageProcurement != null) {
+			info("Here is page ProcurementPlan");
+		} else {
+			info("Go to page ProcurementPlan not successfully");
+		}
+
 	}
 
 }

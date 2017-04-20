@@ -1,9 +1,24 @@
 package org.vnpt_technology.selenium;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
+
+import java.awt.AWTException;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Window;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openqa.selenium.By;
@@ -12,6 +27,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,7 +36,10 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
+
 import static org.vnpt_technology.selenium.TestLogger.*;
 
 public class Utils {
@@ -28,6 +47,8 @@ public class Utils {
 	private static HSSFSheet ExcelWSheet;
 	private static HSSFWorkbook ExcelWBook;
 	private static HSSFCell Cell;
+	private static HSSFRow Row;
+
 	public WebDriver driver;
 
 	public WebDriver newDriver;
@@ -57,6 +78,7 @@ public class Utils {
 	/* ========Default System Property============= */
 	public final String DEFAULT_BASEURL = "http://10.84.11.6";
 	public final String DEFAULT_BROWSER = "firefox";// iexplorer, firefox,chrome
+
 	public final String DEFAULT_SERVER = "win"; // win, ubuntu
 	public final String DEFAULT_NATIVE_EVENT = "true";
 
@@ -228,6 +250,28 @@ public class Utils {
 	}
 
 	/**
+	 * Wait time
+	 */
+	public void waitTime() {
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+	}
+
+	/**
+	 * wait for element present
+	 * 
+	 * @param element
+	 */
+	public void waitForElementPresent(By element) {
+
+		FluentWait wait = new FluentWait(driver);
+		wait.withTimeout(5000, TimeUnit.MILLISECONDS);
+		wait.pollingEvery(250, TimeUnit.MILLISECONDS);
+		wait.ignoring(NoSuchElementException.class);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+	}
+
+	/**
 	 * type to textbox
 	 * 
 	 * @param locator
@@ -316,6 +360,44 @@ public class Utils {
 		}
 		Utils.pause(1000);
 	}
+	
+	/**
+	 * Use this function to verify if a check-box is checked (using when creating a portal/publicMode)
+	 * @param locator
+	 * @param opParams
+	 */
+	public void check(Object locator, int... opParams) {
+		int notDisplayE = opParams.length > 0 ? opParams[0]: 0;
+		Actions actions = new Actions(driver);
+		try {
+			WebElement element = waitForAndGetElement(locator, DEFAULT_TIMEOUT, 1, notDisplayE);
+			if (browser.contains("chrome")) {
+				scrollToElement(element, driver);
+			}
+			if (!element.isSelected()) {
+				actions.click(element).perform();
+				if(waitForAndGetElement(locator, DEFAULT_TIMEOUT, 1, notDisplayE).getAttribute("type")!=null && waitForAndGetElement(locator, DEFAULT_TIMEOUT, 1, notDisplayE).getAttribute("type")!="checkbox"){
+					info("Checkbox is not checked");
+					if (!element.isSelected()) {
+						info("check by javascript");
+						waitForAndGetElement(locator, DEFAULT_TIMEOUT, 1, notDisplayE);
+						//mouseOver(locator, true);
+						clickByJavascript(locator, notDisplayE);
+					}
+				}
+			} else {
+				info("Element " + locator + " is already checked.");
+			}
+		} catch (StaleElementReferenceException e) {
+			checkCycling(e, DEFAULT_TIMEOUT/WAIT_INTERVAL);
+			Utils.pause(WAIT_INTERVAL);
+			check(locator, opParams);
+		} finally {
+			loopCount = 0;
+		}
+		Utils.pause(2000);
+	}
+
 
 	/**
 	 * mouse over and clic
@@ -424,6 +506,16 @@ public class Utils {
 	}
 
 	/**
+	 * verify element exists or not
+	 * 
+	 * @param locator
+	 * @return true if element doesn't exists false if element exist
+	 */
+	public boolean isElementNotPresent(Object locator) {
+		return !isElementPresent(locator);
+	}
+
+	/**
 	 * check element displays or net
 	 * 
 	 * @param locator
@@ -458,6 +550,28 @@ public class Utils {
 			checkCycling(e, DEFAULT_TIMEOUT / WAIT_INTERVAL);
 			Utils.pause(WAIT_INTERVAL);
 			return getValue(locator);
+		} finally {
+			loopCount = 0;
+		}
+	}
+
+	/**
+	 * get text of element
+	 * 
+	 * @param locator
+	 * @param opts
+	 * @return text of element
+	 */
+	public String getText(Object locator, int... opts) {
+		WebElement element = null;
+		int display = opts.length > 0 ? opts[0] : 1;
+		try {
+			element = waitForAndGetElement(locator, DEFAULT_TIMEOUT, 1, display);
+			return element.getText();
+		} catch (StaleElementReferenceException e) {
+			checkCycling(e, DEFAULT_TIMEOUT / WAIT_INTERVAL);
+			Utils.pause(WAIT_INTERVAL);
+			return getText(locator);
 		} finally {
 			loopCount = 0;
 		}
@@ -528,6 +642,7 @@ public class Utils {
 		if (isAssert == 1)
 			assert false : ("Timeout after " + timeout + "ms waiting for element present: " + locator);
 		info("cannot find element after " + timeout / 1000 + "s.");
+		System.out.println("cannot find element after " + timeout / 1000 + "s.");
 		return null;
 	}
 
@@ -560,11 +675,50 @@ public class Utils {
 		try {
 			Cell = ExcelWSheet.getRow(RowNum).getCell(ColNum);
 			String CellData = Cell.getStringCellValue();
-			// System.out.println(CellData);
+			System.out.println(CellData);
 			return CellData;
 		} catch (Exception e) {
 			return "";
 		}
+	}
+
+	/**
+	 * read cell array from excel file
+	 * 
+	 * @param FilePath
+	 * @param SheetName
+	 * @param rownum
+	 * @return
+	 * @throws Exception
+	 */
+	public static Object[][] getTableArray(String FilePath, String SheetName, int rownum) throws Exception {
+		String[][] tabArray = null;
+		try {
+			FileInputStream ExcelFile = new FileInputStream(FilePath);
+			ExcelWBook = new HSSFWorkbook(ExcelFile);
+			ExcelWSheet = ExcelWBook.getSheet(SheetName);
+			Row = ExcelWSheet.getRow(rownum);
+			int startRow = 1;
+			int startCol = 0;
+			int ci, cj;
+			int totalRows = ExcelWSheet.getLastRowNum();
+			int totalCols = Row.getLastCellNum();
+			tabArray = new String[totalRows][totalCols];
+			ci = 0;
+			for (int i = startRow; i <= totalRows; i++, ci++) {
+				cj = 0;
+				for (int j = startCol; j < totalCols; j++, cj++) {
+					tabArray[ci][cj] = getcelldata(i, j);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			info("Could not read the Excel sheet");
+			e.printStackTrace();
+		} catch (IOException e) {
+			info("Could not read the Excel sheet");
+			e.printStackTrace();
+		}
+		return (tabArray);
 	}
 
 	/**
@@ -594,5 +748,71 @@ public class Utils {
 		String absolutePath = curDir + relativeFilePath;
 		info("absolutePath:" + absolutePath);
 		return absolutePath;
+	}
+
+	/**
+	 * Capture the screen of the current graphics device
+	 * 
+	 * @param fileName
+	 *            input an image name (String)
+	 */
+	public static void captureScreen(String fileName) {
+		String path;
+		BufferedImage screenCapture;
+		// Thread.sleep(3000);
+		pause(3000);
+		try {
+			Robot robot = new Robot();
+			Rectangle screenSize = getScreenSize();
+			screenCapture = robot.createScreenCapture(screenSize);
+			// Save as PNG
+			String curDir = System.getProperty("user.dir");
+			path = curDir + "/target/screenshoot/";
+			File f = new File(path);
+			if (!f.exists())
+				f.mkdir();
+			ImageIO.write(screenCapture, "png", new File(path + fileName));
+
+		} catch (AWTException e) {
+			error("Failed to capture screenshot");
+		} catch (IOException e) {
+			path = "Failed to capture screenshot: " + e.getMessage();
+		}
+	}
+
+	/**
+	 * the size of the default screen
+	 * 
+	 * @return the size of the default screen
+	 */
+	public static Rectangle getScreenSize() {
+		GraphicsEnvironment graphE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice graphD = graphE.getDefaultScreenDevice();
+		Window displayM = graphD.getFullScreenWindow();
+		if (displayM != null)
+			return new Rectangle(displayM.getWidth(), displayM.getHeight());
+		else
+			return new Rectangle(1000, 1000);
+	}
+
+	/**
+	 * function to switch to parent windows
+	 */
+	public void switchToParentWindow() {
+		try {
+			Set<String> availableWindows = driver.getWindowHandles();
+			String WindowIdParent = null;
+			int counter = 1;
+			for (String windowId : availableWindows) {
+				if (counter == 1) {
+					WindowIdParent = windowId;
+				}
+				counter++;
+			}
+			driver.switchTo().window(WindowIdParent);
+			Utils.pause(1000);
+		} catch (WebDriverException e) {
+			e.printStackTrace();
+		}
 	}
 }

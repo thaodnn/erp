@@ -1,15 +1,28 @@
 package org.vnpt_technology.selenium.locator;
 import org.openqa.selenium.By;
+import org.vnpt_technology.selenium.Utils;
 
-public class ProcurementPlanLocator {
+public class ProcurementPlanLocator extends Utils {
 	// Page Procurement plan
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_SEARCH = By.xpath("//input[@name='username']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_SEARCH_MONTH = By.xpath("//input[@name='password']");
-	public By ELEMENT_BUTTON_PROCUREMENTPLAN_DELETE = By.xpath("//input[@class='btn btn-danger' and @ng-disabled='check.list == 0']");
-	public By ELEMENT_BUTTON_PROCUREMENTPLAN_DELETE_DISABLE = By.xpath("//input[@class='btn btn-danger' and @ng-disabled='check.list == 0' and @disabled='disabled']");
+	public By ELEMENT_BUTTON_PROCUREMENTPLAN_DELETE = By.xpath("//button[@class='btn btn-danger' and @ng-disabled='check.list == 0']");
+	public By ELEMENT_BUTTON_COMFIRM_YES = By.xpath("//button[text()='Yes']");
+	public By ELEMENT_BUTTON_COMFIRM_No = By.xpath("//button[text()='No']");
+	public By ELEMENT_BUTTON_PROCUREMENTPLAN_DELETE_DISABLE = By.xpath("//button[@class='btn btn-danger' and @ng-disabled='check.list == 0' and @disabled='disabled']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_CREATE = By.xpath("//button[@class='btn btn-primary' and @ng-click='showModalCreate()']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_VIEW_ITEM = By.xpath("//button[@class='btn btn-primary btn-xs' and @ng-click='showModalEditPlan(item)']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_DELETE_ITEM = By.xpath("//button[@class='btn btn-danger btn-xs' and @on-confirm='deleteItem(item)']");
+	public By ELEMENT_LIST_PROCUREMENTLAN_ITEM_PLANID = By.xpath("//a[text()='Plan ID']");
+	public By ELEMENT_LIST_PROCUREMENTLAN_ITEM_PLANNAME = By.xpath("//a[text()='Purchasing Plan's name']");
+	public By ELEMENT_LIST_PROCUREMENTLAN_ITEM_MONTH = By.xpath("//a[text()=' Month']");
+	public By ELEMENT_LIST_PROCUREMENTLAN_ITEM_STATUS = By.xpath("//a[text()='Status']");
+	public By ELEMENT_TEXT_NO_RESULTS = By.xpath("//p[text()='No results']");
+	public By ELEMENT_ROWS_ITEM_2 = By.xpath("//td[text()='2']");
+	public By ELEMENT_RESULTS_SEARCH_NAME = By.xpath("//a[@class='ng-binding' and @ng-click='showModalEditPlan(item)']");
+	public By ELEMENT_TABLE_LIST_PROCURMENTPLAN_ITEM = By.xpath("//div[@class='table-scrollable']/table/tbody");
+	public By ELEMENT_TABLE_LIST_PROCURMENTPLAN_ITEM_TITLE = By.xpath("//div[@class='table-scrollable']/table/thead");
+	public By ELEMENT_NUMCOW_TABLE_PROCUREMNTPLAN = By.xpath("//div[@class='table-scrollable']/table/thead/tr[1]/td");
 	//Display Add Procurement Plan
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_ADD_PLANNAME = By.xpath("//input[@id='name']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_ADD_MONTH = By.xpath("//input[@ng-model='item.plan_date' and @class='form-control form-control date-picker ng-pristine ng-untouched ng-valid']");
