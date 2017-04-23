@@ -270,6 +270,21 @@ public class Utils {
 		wait.ignoring(NoSuchElementException.class);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 	}
+	
+
+	/**
+	 * wait for element not present
+	 * 
+	 * @param element
+	 */
+	public void waitForElementnotPresent(By element) {
+
+		FluentWait wait = new FluentWait(driver);
+		wait.withTimeout(5000, TimeUnit.MILLISECONDS);
+		wait.pollingEvery(250, TimeUnit.MILLISECONDS);
+		wait.ignoring(NoSuchElementException.class);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(element));
+	}
 
 	/**
 	 * type to textbox
@@ -814,5 +829,13 @@ public class Utils {
 		} catch (WebDriverException e) {
 			e.printStackTrace();
 		}
+	}
+	
+
+	/*
+	 * Refresh Page
+	 */
+	public void refreshPage() {
+		driver.navigate().refresh();
 	}
 }

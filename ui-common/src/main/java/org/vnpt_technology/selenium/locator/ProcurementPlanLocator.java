@@ -3,6 +3,11 @@ import org.openqa.selenium.By;
 import org.vnpt_technology.selenium.Utils;
 
 public class ProcurementPlanLocator extends Utils {
+	
+	public final By ELEMENT_TEXTBOX_USERNAME = By.xpath("//input[@name='username']");
+	public final By ELEMENT_TEXTBOX_PASSWORD = By.xpath("//input[@name='password']");
+	public final By ELEMENT_BUTTON_LOGIN = By.xpath("//button[@class='btn blue pull-right ladda-button' and @type ='submit']");
+	public final By ELEMENT_SPAN_SYSTEM = By.xpath("//span[text()='SYSTEM']");
 	// Page Procurement plan
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_SEARCH = By.xpath("//input[@name='username']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_SEARCH_MONTH = By.xpath("//input[@name='password']");
@@ -24,6 +29,8 @@ public class ProcurementPlanLocator extends Utils {
 	public By ELEMENT_TABLE_LIST_PROCURMENTPLAN_ITEM_TITLE = By.xpath("//div[@class='table-scrollable']/table/thead");
 	public By ELEMENT_NUMCOW_TABLE_PROCUREMNTPLAN = By.xpath("//div[@class='table-scrollable']/table/thead/tr[1]/td");
 	//Display Add Procurement Plan
+	public By ELEMENT_TABLE_LIST_PRODUCT = By.xpath("//div[@class='table-responsive']/table/tbody");
+	public By ELEMENT_TEXT_PRODUCT_NO_RESULTS = By.xpath("//td[text()='No results']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_ADD_PLANNAME = By.xpath("//input[@id='name']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_ADD_MONTH = By.xpath("//input[@ng-model='item.plan_date' and @class='form-control form-control date-picker ng-pristine ng-untouched ng-valid']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_ADD_PLAN = By.xpath("//input[@id='select_sys_plan']");
@@ -32,6 +39,7 @@ public class ProcurementPlanLocator extends Utils {
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_ADD_RESET = By.xpath("//button[@class='btn btn-warning' and @ng-click='resetModal()']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_ADD_CANCEL = By.xpath("//button[@class='btn btn-default' and @ng-click='cancelModal()']");
 	//Display View Procurement Plan
+	public By ELEMENT_POPUP_VIEW_PROCUREMENT_PLAN = By.xpath("//h1[text()='Update SCC Purchasing Plan']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_VIEW_APPROVE = By.xpath("//button[@class='btn green' and @ng-click='updateStatusScPlan(pr)']");
 	public By ELEMENT_BUTTON_PROCUREMENTPLAN_VIEW_APPROVE_DISABLE = By.xpath("//button[@class='btn green' and @ng-click='updateStatusScPlan(pr)'and @disabled='disabled']");
 	public By ELEMENT_TEXTBOX_PROCUREMENTPLAN_VIEW_MONTH = By.xpath("//input[@ng-model='item.plan_date'and @class='form-control form-control-inline date-picker2 ng-pristine ng-untouched ng-valid']");
@@ -54,5 +62,11 @@ public class ProcurementPlanLocator extends Utils {
 	public By ELEMENT_LABEL_PROCUREMENTPLAN_VIEW_STATUS_PLAN_DRAFT = By.xpath("//span[text()='Draft']");
 	public By ELEMENT_LABEL_PROCUREMENTPLAN_VIEW_STATUS_PRODUCT_NOTBUY = By.xpath("//span[text()='Not Buy']");
 	public By ELEMENT_LABEL_PROCUREMENTPLAN_VIEW_STATUS_PRODUCT_BUYING = By.xpath("//span[text()='Buying']");
-	
+	//SCBoM
+	public By ELEMENT_TAB_INITIALIZE = By.xpath("//a[@href='#/scc/scbom/22/init_info']");
+	public By ELEMENT_TAB_CREATE_SCBOM = By.xpath("//a[@href='#/scc/scbom/40/create_sc_bom']");
+	public By ELEMENT_TEXT_NAME_SCBOM = By.xpath("//input[@ng-model='scBomInfo.name']");
+	public By ELEMENT_SEARCH_BOX_SCBOM = By.xpath("//input[@ng-model='ListScBomServices.searchName']");
+	public By ELEMENT_NO_FIND_RESULT_SCBOM = By.xpath("//p[text()='No results found for search']");
+	public By ELEMENT_BUTTON_GENNERATE_SCBOM = By.xpath("//button[@class='btn green btn-submit ladda-button' and @ladda='submitting']");
 }

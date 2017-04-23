@@ -1,5 +1,6 @@
 package org.vnpt_technology.selenium;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -8,7 +9,8 @@ public class TestLogger {
 		Throwable t = new Throwable(); 
 		String logMessage = message;
 		StackTraceElement[] elements = t.getStackTrace();
-		Logger logger = Logger.getLogger(TestLogger.class.getName());
+		Logger logger = Logger.getLogger(Utils.class);
+		BasicConfigurator.configure();
 		String Filename = elements[2].getFileName();
 		String sClassName = Filename.substring(0, Filename.length() - 5);//remove .java
 		String sMethodName = elements[2].getMethodName();
